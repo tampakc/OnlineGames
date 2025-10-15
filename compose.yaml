@@ -1,0 +1,7 @@
+﻿services:
+  onlinegames:
+    image: onlinegames
+    build:
+      context: .
+      dockerfile: Dockerfile
+

@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineGames", "OnlineGames.csproj", "{9AAD90D1-F0A2-4F40-93C5-9A963E3108C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{77A6369A-634C-40C6-ABE1-32337C4BE11E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AAD90D1-F0A2-4F40-93C5-9A963E3108C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AAD90D1-F0A2-4F40-93C5-9A963E3108C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AAD90D1-F0A2-4F40-93C5-9A963E3108C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AAD90D1-F0A2-4F40-93C5-9A963E3108C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
