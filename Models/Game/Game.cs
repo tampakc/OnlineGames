@@ -14,7 +14,7 @@ public abstract class Game
     public GameStatus Status { get; set; }
     
     [Required]
-    public IEnumerable<User.User> Players { get; set; } = new List<User.User>();
+    public IEnumerable<User.User> Players { get; init; } = new List<User.User>();
     
     [Required]
     public abstract IGameState GameState { get; }

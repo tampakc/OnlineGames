@@ -51,8 +51,11 @@ public class UserController : ControllerBase
     {
         var user = await _context.Users.OfType<RegisteredUser>()
             .FirstOrDefaultAsync(u => u.Email == request.Email);
+        
+        var userCredentials = await _context.UserCredentials
+            .FirstOrDefaultAsync(u => u.User == user);
 
-        if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+        if (user == null || userCredentials == null || !BCrypt.Net.BCrypt.Verify(request.Password, userCredentials.PasswordHash))
             return Unauthorized("Invalid email or password");
 
         var token = GenerateJwtToken(user);
@@ -88,11 +91,18 @@ public class UserController : ControllerBase
         var user = new RegisteredUser
         {
             DisplayName = dto.DisplayName,
-            Email = dto.Email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password)
+            Email = dto.Email
+        };
+
+        var credentials = new UserCredentials
+        {
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            PasswordLastChanged = DateTime.Now,
+            User = user
         };
 
         _context.Users.Add(user);
+        _context.UserCredentials.Add(credentials);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetUser), new { id = user.Id }, user);

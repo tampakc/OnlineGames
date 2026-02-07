@@ -10,6 +10,7 @@ namespace OnlineGames.Data;
 public class AppDbContext : DbContext
 {
     public DbSet<User> Users => Set<User>();
+    public DbSet<UserCredentials> UserCredentials => Set<UserCredentials>();
     public DbSet<Game> Games => Set<Game>();
     
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
@@ -23,14 +24,22 @@ public class AppDbContext : DbContext
         };
         
         modelBuilder.Entity<User>()
+            .ToTable("User")
             .HasDiscriminator<string>("UserType")
             .HasValue<RegisteredUser>("Registered")
             .HasValue<GuestUser>("Guest");
         
+        modelBuilder.Entity<UserCredentials>()
+            .ToTable("UserCredentials")
+            .HasOne<User>(uc => uc.User)
+            .WithOne()
+            .HasForeignKey<UserCredentials>("UserId");
+        
         modelBuilder.Entity<Game>()
+            .ToTable("Game")
             .HasMany(g => g.Players)
             .WithMany()
-            .UsingEntity(j => j.ToTable("GamePlayers"));
+            .UsingEntity(j => j.ToTable("GamePlayer"));
 
         modelBuilder.Entity<ImpostorGame>()
             .Property(g => g.GameState)

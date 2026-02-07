@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -11,7 +12,7 @@ namespace OnlineGames.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Games",
+                name: "Game",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -23,11 +24,11 @@ namespace OnlineGames.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.PrimaryKey("PK_Game", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "User",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -35,16 +36,15 @@ namespace OnlineGames.Migrations
                     DisplayName = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
                     UserType = table.Column<string>(type: "TEXT", maxLength: 13, nullable: false),
                     SessionId = table.Column<string>(type: "TEXT", nullable: true),
-                    Email = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true),
-                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 150, nullable: true)
+                    Email = table.Column<string>(type: "TEXT", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_User", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "GamePlayers",
+                name: "GamePlayer",
                 columns: table => new
                 {
                     GameId = table.Column<int>(type: "INTEGER", nullable: false),
@@ -52,38 +52,68 @@ namespace OnlineGames.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GamePlayers", x => new { x.GameId, x.PlayersId });
+                    table.PrimaryKey("PK_GamePlayer", x => new { x.GameId, x.PlayersId });
                     table.ForeignKey(
-                        name: "FK_GamePlayers_Games_GameId",
+                        name: "FK_GamePlayer_Game_GameId",
                         column: x => x.GameId,
-                        principalTable: "Games",
+                        principalTable: "Game",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GamePlayers_Users_PlayersId",
+                        name: "FK_GamePlayer_User_PlayersId",
                         column: x => x.PlayersId,
-                        principalTable: "Users",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserCredentials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    UserId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PasswordHash = table.Column<string>(type: "TEXT", maxLength: 150, nullable: false),
+                    PasswordLastChanged = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCredentials", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserCredentials_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GamePlayers_PlayersId",
-                table: "GamePlayers",
+                name: "IX_GamePlayer_PlayersId",
+                table: "GamePlayer",
                 column: "PlayersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCredentials_UserId",
+                table: "UserCredentials",
+                column: "UserId",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GamePlayers");
+                name: "GamePlayer");
 
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "UserCredentials");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Game");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }
